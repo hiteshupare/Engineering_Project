@@ -1,0 +1,130 @@
+#include<avr/io.h>
+#include<util/delay.h>
+#include <multiutil.h>
+#include <uart.h>
+
+void main()
+{
+
+	Baud_Rate();
+	Receiver_Enable();
+	Transmit_Enable();	
+
+	DDRC=0b11000011;
+	PORTC=0b00000000;
+	lcd_init();
+	init_adc();
+	uint16_t temp,hm1,hm2;
+	int adc_value1,adc_value2;
+	
+	while(1)
+	{
+
+	adc_value1=read_adc(1);
+	adc_value2=read_adc(2);
+	 
+	lcd_clrscr();
+	temp = (adc_value1*49) ;
+
+	lcd_goto(0,1);
+	lcd_prints("Temp=");
+	lcd_goto(6,1);
+	 lcd_put_i ( adc_value1*49 , 2, 5) ;
+	lcd_goto(10,1);
+	lcd_printc(0xDF);
+	lcd_printc('C');
+	_delay_ms(300);
+	hm1=adc_value2/17;
+	_delay_ms(300);
+	hm2=hm1/13;
+	_delay_ms(100);
+	
+			lcd_goto(0,2);
+			lcd_prints("Humd=");
+			lcd_goto(6,2);
+			lcd_printi(hm1);	
+			_delay_ms(100);
+			lcd_goto(9,2);
+			lcd_prints("PER");	
+			_delay_ms(100);
+
+			if(temp>2500 && temp<3000)
+				{
+					Usart_Transmit('1');
+		  			_delay_ms(100);
+					Usart_Transmit('1');
+		  			_delay_ms(100);
+					Usart_Transmit('1');
+		  			_delay_ms(100);
+					Usart_Transmit('1');
+					_delay_ms(100);
+				
+					_delay_ms(100);
+					PORTC=0b11000011;
+					_delay_ms(100);
+					
+				}
+				else if(temp>=3600 && temp<4000)
+				{
+					Usart_Transmit('2');
+		  			_delay_ms(100);
+					Usart_Transmit('2');
+		  			_delay_ms(100);
+					Usart_Transmit('2');
+		  			_delay_ms(100);
+					Usart_Transmit('2');
+					_delay_ms(100);
+				
+					_delay_ms(100);
+					PORTC=0b11000011;
+					_delay_ms(100);
+				
+				}
+					else if(temp>=4500 && temp<=7000)
+				{
+					Usart_Transmit('3');
+		  			_delay_ms(100);
+					Usart_Transmit('3');
+		  			_delay_ms(100);
+					Usart_Transmit('3');
+		  			_delay_ms(100);
+					Usart_Transmit('3');
+		  			_delay_ms(100);
+				
+					_delay_ms(100);
+					PORTC=0b11000011;
+					_delay_ms(100);
+					
+				}
+				else 
+				{
+					Usart_Transmit('4');
+		  			_delay_ms(100);
+					Usart_Transmit('4');
+		  			_delay_ms(100);
+					Usart_Transmit('4');
+		  			_delay_ms(100);
+					Usart_Transmit('4');
+		  			_delay_ms(100);
+				
+					_delay_ms(100);
+					PORTC=0b00000000;
+					_delay_ms(100);
+					
+
+				
+				}
+                  
+  	 	}
+		
+		
+	}
+
+
+
+
+
+
+
+
+

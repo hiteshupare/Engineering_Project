@@ -1,0 +1,73 @@
+#include<avr/io.h>
+#include<util/delay.h>
+#include<multiutil.h>
+#include<uart.h>
+
+void main()
+{
+	
+	Baud_Rate();
+	Receiver_Enable();
+	Transmit_Enable();
+	lcd_init();
+		_delay_ms(30);
+	while(1)
+	{
+		Usart_Receive();
+		_delay_ms(100);
+		
+		if(UDR=='1')
+		{
+			_delay_ms(100);
+		lcd_clrscr();
+		lcd_goto(0,1);
+		lcd_prints(" **temp>25 c**");
+		lcd_goto(0,2);
+		lcd_prints("HM DECREASED");
+		_delay_ms(100);
+		}
+		else if(UDR=='2')
+		{
+		_delay_ms(100);
+		lcd_clrscr();
+		lcd_goto(0,1);
+		lcd_prints(" **temp>35 c**");
+		lcd_goto(0,2);
+		lcd_prints("HM DECREASED");
+		_delay_ms(100);
+		
+	
+		}
+			else if(UDR=='3')
+		{
+			_delay_ms(100);
+		lcd_clrscr();
+		lcd_goto(0,1);
+		lcd_prints(" **temp>45 c**");
+		lcd_goto(0,2);
+		lcd_prints("HM DECREASED");
+		_delay_ms(100);
+	
+		}
+			else if(UDR=='4')
+		{
+			_delay_ms(100);
+		lcd_clrscr();
+		lcd_goto(0,1);
+		lcd_prints(" **NORMAL**");
+		lcd_goto(0,2);
+		lcd_prints("**************");
+		_delay_ms(100);
+	
+		}
+		
+		
+	}
+
+}
+
+
+
+
+
+
